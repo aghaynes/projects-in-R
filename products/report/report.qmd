@@ -1,0 +1,57 @@
+---
+title: "Second wave of COVID-19 in Switzerland"
+author: "Alan Haynes (Christian Althaus)"
+date: today
+format: 
+  html:
+    code-fold: true
+---
+
+```{r}
+#| output: false
+library(tidyverse)
+library(here)
+```
+
+## Intro
+
+Visualize the COVID cases in Switzerland in autumn 2020.
+
+## Data
+
+
+
+```{r}
+#| output: false
+
+dat <- read_csv(here("data", "raw", "COVID19Cases_geoRegion.csv"))
+
+ch <- dat |> filter(geoRegion == "CH")
+
+start <- ymd("2020-09-01")
+end <- ymd("2020-11-30")
+
+wave2 <- ch |> filter(datum >= start, 
+                      datum <= end)
+
+```
+
+
+## Viz
+
+The following figure shows the number of confirmed COVID-19 from `r start` to `r end` in Switzerland.
+
+
+```{r}
+#| label: fig-cases
+#| fig-cap: "COVID-19 cases in Switzerland"
+wave2 |> ggplot(aes(x = datum, y = entries)) +
+  geom_col(fill = unibeCols::unibeRed()) +
+  labs(title = "Second wave of COVID-19 in Switzerland",
+       x = "Date",
+       y = "Cases") +
+  theme_bw()
+
+```
+
+
